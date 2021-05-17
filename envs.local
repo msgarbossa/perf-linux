@@ -1,0 +1,11 @@
+
+DIR=`pwd`
+export PYTHONPATH="$DIR"
+
+which python >/dev/null 2>&1
+if [[ $? -ne 0 ]]; then
+    # alias python=python3
+    ln -sf /usr/bin/python3 ./python
+    export PATH="$DIR:$PATH"
+fi
+
