@@ -249,12 +249,18 @@ header2key = {
     'file-nr': '',
     'inode-nr': '',
     'proc/s': '',
+    'cswch/s': '',
+    'intr/s': '',
+    'runq-sz': '',
     'plist-sz': '',
     'tps': '',
     'rtps': '',
     'wtps': '',
     'bread/s': '',
     'bwrtn/s': '',
+    'packet/s': '',
+    'udp/s': '',
+    'tcp/s': '',
     'rxpck/s': 'IFACE',
     'txpck/s': 'IFACE',
     'rxkB/s': 'IFACE',
@@ -262,9 +268,15 @@ header2key = {
     'rxmcst/s': 'IFACE',
     'rxerr/s': 'IFACE',
     'txerr/s': 'IFACE',
+    'coll/s': 'IFACE',
     'rxdrop/s': 'IFACE',
     'txdrop/s': 'IFACE'
 }
+
+    # 'txcarr/s': 'IFACE',
+    # 'rxfram/s': 'IFACE',
+    # 'rxfifo/s': 'IFACE',
+    # 'txfifo/s': 'IFACE'
 
 # Initialise the sar_data map by creating an empty sub-map against each
 # unique major header
@@ -297,8 +309,10 @@ for row in reader:
             if h in header2key:
                 flag_read_data = True
                 header = row
+                # if additional key_name supplied for metric, cache key_name to use for aggregation
                 if header2key[h]:
                     key_name = header2key[h]
+        # if key_name defined, enumerate row and get the index number for aggregating the rows of data
         if key_name:
             for i, h in enumerate(row):
                 if h == key_name:
@@ -318,6 +332,8 @@ for row in reader:
                         sar_data[key_name][key_val][header[i]] = []
                     sar_data[key_name][key_val][header[i]].append(decimal.Decimal(v))
 
+
+# TODO: Make these metric rows DRY
 
 # pswpin/s
 (s_avg, s_sd, s_min, s_max) = calc_avg_sd(sar_data['pswpin/s'], 0)
@@ -389,9 +405,39 @@ stats.append(s_row)
 s_row = ['proc/s', s_avg, s_sd, s_min, s_max, 'tasks created /s']
 stats.append(s_row)
 
+# cswch/s
+(s_avg, s_sd, s_min, s_max) = calc_avg_sd(sar_data['cswch/s'], 1)
+s_row = ['cswch/s', s_avg, s_sd, s_min, s_max, 'context switches /s']
+stats.append(s_row)
+
+# intr/s
+(s_avg, s_sd, s_min, s_max) = calc_avg_sd(sar_data['intr/s'], 0)
+s_row = ['intr/s', s_avg, s_sd, s_min, s_max, 'interrupts /s']
+stats.append(s_row)
+
+# runq-sz
+(s_avg, s_sd, s_min, s_max) = calc_avg_sd(sar_data['runq-sz'], 0)
+s_row = ['runq-sz', s_avg, s_sd, s_min, s_max, 'run queue size']
+stats.append(s_row)
+
 # plist-sz
 (s_avg, s_sd, s_min, s_max) = calc_avg_sd(sar_data['plist-sz'], 0)
 s_row = ['plist-sz', s_avg, s_sd, s_min, s_max, 'number of tasks in task list']
+stats.append(s_row)
+
+# packet/s
+(s_avg, s_sd, s_min, s_max) = calc_avg_sd(sar_data['packet/s'], 0)
+s_row = ['packet/s', s_avg, s_sd, s_min, s_max, 'network packets per second']
+stats.append(s_row)
+
+# tcp/s
+(s_avg, s_sd, s_min, s_max) = calc_avg_sd(sar_data['tcp/s'], 0)
+s_row = ['tcp/s', s_avg, s_sd, s_min, s_max, 'TCP packets per second']
+stats.append(s_row)
+
+# udp/s
+(s_avg, s_sd, s_min, s_max) = calc_avg_sd(sar_data['udp/s'], 0)
+s_row = ['udp/s', s_avg, s_sd, s_min, s_max, 'UDP packets per second']
 stats.append(s_row)
 
 # tps
@@ -436,7 +482,7 @@ with open(reportfile, 'w') as fout:
 # Print Network Adapter Report #
 ################################
 
-# todo - need an external data file to store configuration, including
+# TODO: need an external data file to store configuration, including
 #   order of fields to report on
 #   thresholds for each field
 #   descriptions of each filed
