@@ -14,7 +14,6 @@ duration_str = str(duration)
 #############################################
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
-plugin_dir = os.path.join(base_dir, 'plugins')
 data_dir = os.path.join(base_dir, 'data')
 datetime = strftime("%Y-%m-%d_%H%M%S", localtime())
 date_dir = os.path.join(data_dir, datetime)
@@ -64,7 +63,7 @@ call('netstat -in >netstat_in_start.out', shell=True)
 children = []
 
 print("forking tcpdump")
-cmd = '{0}/tcpdump-collect.py -w {1} -t 10'.format(plugin_dir, os.path.join(cmd_out_dir, 'tcpdump.pcap'))
+cmd = '{0}/tcpdump-collect.py -w {1} -t 10'.format(base_dir, os.path.join(cmd_out_dir, 'tcpdump.pcap'))
 pid = os.fork()
 if pid > 0:
     # parent

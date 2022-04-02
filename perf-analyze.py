@@ -23,7 +23,6 @@ duration_str = str(duration)
 #############################################
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
-plugin_dir = os.path.join(base_dir, 'plugins')
 data_dir = os.path.join(base_dir, 'data')
 date_dir = os.path.join(data_dir, 'current')
 cmd_out_dir = os.path.join(date_dir, 'cmds_out')
@@ -479,13 +478,13 @@ with open(reportfile, 'a') as fout:
 
 # Run netstat_analyser.py to write IP lookup cache to file and write report file with lookups
 outfile = os.path.join(report_out_dir, 'netstat_an_dns.report')
-cmd = os.path.join(plugin_dir, 'netstat_analyser.py')
+cmd = os.path.join(base_dir, 'netstat_analyser.py')
 cmd = cmd + " -n -r " + cmd_out_dir + " -w " + cmd_out_dir + " > " + outfile
 call(cmd , shell=True)
 
 # Create report file from netstat output file
 outfile = os.path.join(report_out_dir, 'netstat_an.report')
-cmd = os.path.join(plugin_dir, 'netstat_analyser.py')
+cmd = os.path.join(base_dir, 'netstat_analyser.py')
 cmd = cmd + " -r " + cmd_out_dir + " > " + outfile
 call(cmd , shell=True)
 
@@ -503,7 +502,7 @@ with open(reportfile, 'a') as fout:
 
 # Create report file from netstat output file
 outfile = os.path.join(report_out_dir, 'tcpdump.report')
-cmd = os.path.join(plugin_dir, 'tcpdump-analyze.py')
+cmd = os.path.join(base_dir, 'tcpdump-analyze.py')
 pcap_file = os.path.join(cmd_out_dir, 'tcpdump.pcap')
 cmd = cmd + " -r " + pcap_file + " > " + outfile
 call(cmd , shell=True)

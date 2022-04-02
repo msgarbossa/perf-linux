@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import os
 import signal
@@ -9,6 +9,7 @@ import getopt
 import re
 
 # modules from parent directory (export PYTHONPATH=<parent_dir>)
+#sys.path.append('..')
 from mod_stats import *
 from tabulate import tabulate
 
