@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # from time import time, strftime, localtime
 from subprocess import STDOUT, call, Popen, PIPE
@@ -508,10 +508,11 @@ pcap_file = os.path.join(cmd_out_dir, 'tcpdump.pcap')
 cmd = cmd + " -r " + pcap_file + " > " + outfile
 call(cmd , shell=True)
 
+# combine tcpdump report "outfile" into aggregated reportfile (report.txt)
 with open(reportfile, 'a') as fout:
-    fout.write("************************\n")
+    fout.write("********************\n")
     fout.write("** tcpdump report **\n")
-    fout.write("************************\n")
+    fout.write("********************\n")
     with open(outfile, 'r') as fin:
         fout.write(fin.read())
     fout.write('\n\n\n')

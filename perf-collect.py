@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import os
 from time import time, localtime, strftime
@@ -23,11 +23,15 @@ report_out_dir = os.path.join(date_dir, 'reports_out')
 
 if not os.path.exists(cmd_out_dir):
     os.makedirs(cmd_out_dir)
-    os.chdir(data_dir)
-    if os.path.exists("current"):
-        os.remove("current")
-    ln_src = os.path.join(data_dir, "current")
-    os.symlink(datetime, ln_src)
+
+if not os.path.exists(data_dir):
+    os.makedirs(data_dir)
+
+os.chdir(data_dir)
+if os.path.exists("current"):
+    os.remove("current")
+ln_src = os.path.join(data_dir, "current")
+os.symlink(datetime, ln_src)
 
 if not os.path.exists(report_out_dir):
     os.makedirs(report_out_dir)
